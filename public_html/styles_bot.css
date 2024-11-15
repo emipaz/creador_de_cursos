@@ -1,0 +1,108 @@
+:root {
+    --primary-color-bot: #00ffc8;
+    --primary-hover-color-bot: #09b300;
+    --secondary-color-bot: rgb(8, 43, 45);
+    --background-color-bot: #0b0606;
+    --border-color-bot: #ccc;
+    --text-color-bot: hsl(72, 68%, 76%);
+    --placeholder-color-bot: #888;
+    --font-family-bot: Arial, sans-serif;
+    --box-shadow-bot: rgba(0, 0, 0, 0.3);
+    --box-shadow-heavy-bot: rgba(0, 0, 0, 0.5);
+    --border-radius-bot: 8px;
+}
+
+#chatbot {
+    font-family: var(--font-family-bot);
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#chatbot-circle {
+    background-color: var(--primary-color-bot);
+    color: var(--secondary-color-bot);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px var(--box-shadow-bot);
+    font-size: 30px;
+}
+
+#chatbot-container {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    width: 600px;
+    height: 90%;
+    max-width: 100%;
+    background: var(--secondary-color-bot);
+    border: 1px solid var(--border-color-bot);
+    border-radius: var(--border-radius-bot);
+    box-shadow: 0 4px 10px var(--box-shadow-heavy-bot);
+    overflow: hidden;
+}
+
+#chatbot-main {
+    padding: 20px;
+    box-sizing: border-box-bot;
+}
+
+#chatbot-main h1 {
+    text-align: center;
+    color: var(--text-color-bot);
+    font-size: 18px;
+}
+
+#chatbot-main textarea {
+    width: 100%;
+    border-radius: var(--border-radius-bot);
+    border: 1px solid var(--border-color-bot);
+    background-color: var(--background-color-bot);
+    color : var(--text-color-bot);
+    padding : 10px;
+    margin-bottom: 10px;
+    font-size : 16px;
+    resize : vertical;
+    box-sizing : border-box;
+}
+
+#chatbot-main button {
+    background-color: var(--primary-color-bot);
+    color: var(--secondary-color-bot);
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius-bot);
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#chatbot-main button:hover {
+    background-color: var(--primary-hover-color-bot);
+}
+
+#chatbot-main iframe {
+    background: var(--secondary-color-bot);
+    border: none;
+    width: 100%;
+    height: 300px;
+    box-sizing: border-box;
+}
+/* Estilos para el texto de instrucciones */
+#instructionText {
+    color: var(--placeholder-color-bot);
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
