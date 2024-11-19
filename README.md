@@ -62,7 +62,7 @@ texto.
 Ejemplo
 Si tienes un directorio llamado CursoPython con subcarpetas que contienen archivos .txt, ejecuta:
 
-python script.py CursoPython
+python main.py CursoPython
 
 #### Salida generada
 
