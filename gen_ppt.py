@@ -53,7 +53,7 @@ def crear_ppt(material, origen, modulo):
     subtitulo = modulo
     slides    = material.get("slides", [] )
     nombre = curso + "_" +modulo +".ppt"
-    path = os.path.join( origen , DESTINO_PPT ,nombre)
+    path = os.path.join( origen ,nombre)
     prs = Presentation()
     
     # Diapositiva 1: Título
