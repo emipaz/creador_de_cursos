@@ -45,13 +45,15 @@ def crear_slide(mark : str, ) -> str:
 
     return json.loads(chat.choices[0].message.content)
 
-def crear_ppt(material, curso, modulo):
+def crear_ppt(material, origen, modulo):
     from pptx import Presentation
+    curso = origen.split("\\")[-1]
+    print(curso)
     titulo    = curso
     subtitulo = modulo
     slides    = material.get("slides", [] )
     nombre = curso + "_" +modulo +".ppt"
-    path = os.path.join(DESTINO_PPT,nombre)
+    path = os.path.join( origen , DESTINO_PPT ,nombre)
     prs = Presentation()
     
     # Diapositiva 1: Título

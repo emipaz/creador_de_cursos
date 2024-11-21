@@ -19,8 +19,9 @@ def crear_html_ppt(curso, carpeta):
     for archivo in tqdm(os.listdir(os.path.join(curso, carpeta))):
         path = os.path.join(curso, carpeta, archivo)
         # print(path)
+        if archivo == ".ipynb_checkpoints" : continue
         doc = TextLoader(path).load()
-        # documentos_base.extend(doc)
+        # TODO fragmentar con rescursive para la busqueda semantica documentos_base.extend(doc)
         resumen = ""
         for d in doc:
             res = crear_resumen(d.page_content) + "\n___\n"
@@ -44,6 +45,7 @@ if __name__ == "__main__":
     parser.add_argument("carpeta", type=str, help="Carpeta del curso")
     args = parser.parse_args()
     print(args)
+    
     curso , carpetas, _ = next(os.walk(args.carpeta))
     curso = curso.strip("\\").lstrip(".\\")
     
@@ -55,7 +57,7 @@ if __name__ == "__main__":
         html, slides = crear_html_ppt(curso, carpeta)
         guardar_html(html, modulo)
         crear_ppt(slides, curso, modulo)
-        
+        # TODO Crear base de datos con los documantos fragmentados
         
             
 
