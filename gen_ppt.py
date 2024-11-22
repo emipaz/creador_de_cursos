@@ -7,8 +7,8 @@ from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from prompt import get_full_html
+from prompt import SYSTEM_MD, SYSTEM_PPT
 from dotenv import load_dotenv , find_dotenv
-
 if load_dotenv(find_dotenv()):
     import openai
     cliente = openai.Client()

@@ -10,7 +10,7 @@ from gen_ppt import base
 
 from config import DESTINO_WEB , DESTINO_PPT , DESTINO_BASES
 
-def crea_material(curso, carpeta):
+def crear_material(curso, carpeta):
     slides = {"slides":[]}
     html = ""
     documentos_base = []
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     carpeta_html  = os.path.join(args.carpeta, DESTINO_WEB)
     carpeta_ppts  = os.path.join(args.carpeta, DESTINO_PPT)
     carpeta_bases = os.path.join(args.carpeta, DESTINO_BASES)
-    os.makedirs(ruta, exist_ok=True)
-    os.makedirs(pres, exist_ok=True)
+    os.makedirs(carpeta_html, exist_ok=True)
+    os.makedirs(carpeta_ppts, exist_ok=True)
     curso , carpetas, _ = next(os.walk(args.carpeta))
     curso = curso.strip("\\").lstrip(".\\")
     
