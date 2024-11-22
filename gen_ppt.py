@@ -1,15 +1,48 @@
 import os
 import json
-
+import markdown
+from pptx import Presentation
+from mdx_math import MathExtension
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from prompt import get_full_html
 from dotenv import load_dotenv , find_dotenv
-load_dotenv(find_dotenv())
-import openai
-cliente = openai.Client()
+
+if load_dotenv(find_dotenv()):
+    import openai
+    cliente = openai.Client()
+else:
+    print("Debe configurar una api_key de oopenai")
 
 
-from langchain_community.document_loaders import TextLoader
-from prompt import SYSTEM_MD , SYSTEM_PPT
-from config import DESTINO_PPT
+emb = OpenAIEmbeddings()
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size = 2000,
+    chunk_overlap = 250
+)
+
+def base(curso, index, documentos):
+    path = os.path.join(curso,f"base_{index}")
+    bs = Chroma(embedding_function = emb, persist_directory = path)
+    fragmentos = text_splitter.split_documents(documents=documentos)
+    return bs.add_documents(documents=fragmentos)
+
+def markdown_to_html_with_math(markdown_text):
+    # Configurar las extensiones
+    md = markdown.Markdown(extensions=['extra', MathExtension(enable_dollar_delimiter=True)])
+    
+    # Convertir Markdown a HTML
+    html = md.convert(markdown_text)
+    return html
+
+def guardar_html(html,curso, modulo):
+    des_html = os.path.join(curso, modulo + ".html")
+    full_html = get_full_html(html, modulo)
+    with open(des_html, "w", encoding= "utf-8") as f:
+        f.write(full_html)
+    print("Se guardo en : ", des_html)
 
 def crear_resumen(texto :str ) -> str:
     mensaje = [
@@ -46,7 +79,6 @@ def crear_slide(mark : str, ) -> str:
     return json.loads(chat.choices[0].message.content)
 
 def crear_ppt(material, origen, modulo):
-    from pptx import Presentation
     curso = origen.split("\\")[-1]
     print(curso)
     titulo    = curso

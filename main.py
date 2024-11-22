@@ -1,17 +1,16 @@
 import os
-import openai
-from dotenv import load_dotenv , find_dotenv
+from tqdm import tqdm as tqdm
 from langchain_community.document_loaders import TextLoader
 
-from utils import markdown_to_html_with_math
-from tqdm import tqdm as tqdm
 from gen_ppt import crear_resumen
 from gen_ppt import crear_slide, crear_ppt
-from prompt import get_full_html
-from config import DESTINO_WEB , DESTINO_PPT
-from crear_base import base
+from gen_ppt import markdown_to_html_with_math
+from gen_ppt import guardar_html
+from gen_ppt import base
 
-def crear_html_ppt(curso, carpeta):
+from config import DESTINO_WEB , DESTINO_PPT , DESTINO_BASES
+
+def crea_material(curso, carpeta):
     slides = {"slides":[]}
     html = ""
     documentos_base = []
@@ -29,14 +28,6 @@ def crear_html_ppt(curso, carpeta):
         
         html += markdown_to_html_with_math(resumen) + "\n"
     return html, slides, documentos_base
-
-
-def guardar_html(html,curso, modulo):
-    des_html = os.path.join(curso, modulo + ".html")
-    full_html = get_full_html(html, modulo)
-    with open(des_html, "w", encoding= "utf-8") as f:
-        f.write(full_html)
-    print("Se guardo en : ", des_html)
       
 
 if __name__ == "__main__":
@@ -45,24 +36,26 @@ if __name__ == "__main__":
     parser.add_argument("carpeta", type=str, help="Carpeta del curso")
     args = parser.parse_args()
     print(args)
-    ruta = os.path.join(args.carpeta, DESTINO_WEB)
-    pres = os.path.join(args.carpeta, DESTINO_PPT)
+    carpeta_html  = os.path.join(args.carpeta, DESTINO_WEB)
+    carpeta_ppts  = os.path.join(args.carpeta, DESTINO_PPT)
+    carpeta_bases = os.path.join(args.carpeta, DESTINO_BASES)
     os.makedirs(ruta, exist_ok=True)
     os.makedirs(pres, exist_ok=True)
     curso , carpetas, _ = next(os.walk(args.carpeta))
     curso = curso.strip("\\").lstrip(".\\")
     
     print("curso",curso)
-    for index, carpeta in enumerate(carpetas,1):
-        if carpeta == ".ipynb_checkpoints" : continue
-        if carpeta == DESTINO_WEB: continue
-        if carpeta == DESTINO_PPT: continue
+    index = 1
+    for carpeta in carpetas:
+        if carpeta in {".ipynb_checkpoints",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
+            continue
         modulo = carpeta
         print("Crando Html de ",modulo)
-        html, slides, documentos = crear_html_ppt(curso, carpeta)
-        guardar_html(html, ruta, modulo)
-        crear_ppt(slides, pres, modulo)
-        print(base(args.carpeta ,index, documentos))
+        html, slides, documentos = crear_material(curso, carpeta)
+        guardar_html(html, carpeta_html, modulo)
+        crear_ppt(slides, carpeta_ppts, modulo)
+        print(base(carpeta_bases ,index, documentos))
+        index += 1
         # TODO Crear base de datos con los documantos fragmentados
         
             
