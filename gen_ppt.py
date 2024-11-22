@@ -37,9 +37,9 @@ def markdown_to_html_with_math(markdown_text):
     html = md.convert(markdown_text)
     return html
 
-def guardar_html(html,curso, modulo):
+def guardar_html(html,curso, modulo, index):
     des_html = os.path.join(curso, modulo + ".html")
-    full_html = get_full_html(html, modulo)
+    full_html = get_full_html(html, modulo, index)
     with open(des_html, "w", encoding= "utf-8") as f:
         f.write(full_html)
     print("Se guardo en : ", des_html)

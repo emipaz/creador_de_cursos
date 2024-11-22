@@ -52,7 +52,7 @@ if __name__ == "__main__":
         modulo = carpeta
         print("Crando Html de ",modulo)
         html, slides, documentos = crear_material(curso, carpeta)
-        guardar_html(html, carpeta_html, modulo)
+        guardar_html(html, carpeta_html, modulo, index)
         crear_ppt(slides, carpeta_ppts, modulo)
         print(base(carpeta_bases ,index, documentos))
         index += 1

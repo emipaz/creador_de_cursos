@@ -1,5 +1,4 @@
-from config import CURSO , IDIOMA
-
+from config import IDIOMA
 
 SYSTEM_MD = f"""
 Sos un bot especializado en generar documentos markdown con formulas latex , tablas, listas , etc. 
@@ -9,14 +8,14 @@ Sos un bot especializado en generar documentos markdown con formulas latex , tab
 descripcion, tablas, listas , etc bien formateadas en markdown.
 """
 
-SYSTEM_BOT = f"""
-Lo siguente es una lista de tareas para tu comportamiento como un bot asistente:
-1. Sos el bot del curso de {CURSO}.
-2. Recibiras una PREGUNTA y un CONTEXTO.
-3. Limitate solamente a la informacion del CONTEXTO.
-4. Tu mision es crear una respueta clara y breve que contenga informacion relevante.
-4. Por Favor responde en español con un tono amable
-"""
+# SYSTEM_BOT = f"""
+# Lo siguente es una lista de tareas para tu comportamiento como un bot asistente:
+# 1. Sos el bot del curso de {CURSO}.
+# 2. Recibiras una PREGUNTA y un CONTEXTO.
+# 3. Limitate solamente a la informacion del CONTEXTO.
+# 4. Tu mision es crear una respueta clara y breve que contenga informacion relevante.
+# 4. Por Favor responde en español con un tono amable
+# """
 
 SYSTEM_PPT = """
 Sos un bot especializado en generar presentaciones basados en documantos markdown. 
@@ -43,7 +42,7 @@ MATHJAX_SCRIPT = '''
     </script>
     ''' 
     
-def get_full_html(html, modulo):
+def get_full_html(html, modulo, index):
     return f'''
     <!DOCTYPE html>
     <html lang="es">
@@ -57,8 +56,17 @@ def get_full_html(html, modulo):
     <body>
         {html}
     </body>
+        <script>
+        var stylesBot = "styles_bot.css";
+        var stylesMsj = "styles_msj.css";
+        const botName =  "bot-{modulo}";
+        const title = "{modulo}";
+        const bot = "{str(index)}";
+        </script>
+    <script src='./script_bot.js'></script>
     </html>
     '''
+
 
 
 ########################################################
