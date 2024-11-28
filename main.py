@@ -61,7 +61,8 @@ def crear_material(curso, carpeta):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("carpeta", type=str, help="Carpeta del curso")
+    parser.add_argument('-c', '--carpeta', type=str, help="Carpeta del curso")
+    parser.add_argument('--unique_bot', action='store_true', help='Genera un mismo bot para todos los modulos con el material completo')
     args = parser.parse_args()
     print(args)
     base_dir      = os.path.dirname(os.path.abspath(__file__))
@@ -89,7 +90,8 @@ if __name__ == "__main__":
         guardar_html(html, carpeta_html, modulo, index)
         crear_ppt(slides, carpeta_ppts, modulo)
         print(base(carpeta_bases ,index, documentos))
-        index += 1
+        if not args.unique_bot:
+            index += 1
         # TODO Crear base de datos con los documantos fragmentados
         
             
