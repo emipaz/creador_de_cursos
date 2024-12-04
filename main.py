@@ -23,7 +23,7 @@ def carga_extras(path):
         print(f"Cargando : {extra}")
         if extra.endswith('.pdf'):
             loader = PyMuPDFLoader(extra_path)
-        if extra.endswith('.txt') or extra.endswith('.md'):
+        if extra.endswith('.txt') or extra.endswith('.md') or extra.endswith(".py"):
             loader = TextLoader(extra_path)
         documents = loader.load()
         documentos.extend(documents)
@@ -56,7 +56,10 @@ def crear_material(curso, carpeta):
         
         html += markdown_to_html_with_math(resumen) + "\n"
     return html, slides, documentos_base
-  
+
+def copiar_archivos_estaticos(source, dest): 
+    shutil.copytree(source, dest, dirs_exist_ok = True) 
+    print(f"Archivos copiados a {dest}")
 
 if __name__ == "__main__":
     import argparse
@@ -70,11 +73,14 @@ if __name__ == "__main__":
     carpeta_ppts  = os.path.join(args.carpeta, DESTINO_PPT)
     carpeta_bases = os.path.join(args.carpeta, DESTINO_BASES)
     
-    os.makedirs(carpeta_html, exist_ok=True)
+    # os.makedirs(carpeta_html, exist_ok=True)
     os.makedirs(carpeta_ppts, exist_ok=True)
     estilos_js = os.path.join(base_dir, DESTINO_WEB)
     archivo_py = os.path.join(base_dir, "api")
-
+    copiar_archivos_estaticos(estilos_js, carpeta_html)
+    copiar_archivos_estaticos(archivo_py, args.carpeta)
+    
+    
     curso , carpetas, _ = next(os.walk(args.carpeta))
     curso = curso.strip("\\").lstrip(".\\")
     
