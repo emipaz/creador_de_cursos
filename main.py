@@ -33,7 +33,7 @@ def crear_material(curso, carpeta):
     slides = {"slides":[]}
     html = ""
     documentos_base = []
-    for archivo in os.listdir(os.path.join(curso, carpeta)):
+    for archivo in sorted(os.listdir(os.path.join(curso, carpeta))):
         print(archivo)
         path = os.path.join(curso, carpeta, archivo)
         print("cargando", path)
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     index = 1
     htmls = []
     for carpeta in carpetas:
-        if carpeta in {".ipynb_checkpoints",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
+        if carpeta in {".ipynb_checkpoints","__pycache__",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
             continue
         modulo = carpeta
         print("Crando Html de ",modulo)
