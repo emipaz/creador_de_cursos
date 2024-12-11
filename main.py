@@ -26,6 +26,8 @@ def carga_extras(path):
         if extra.endswith('.txt') or extra.endswith('.md') or extra.endswith(".py"):
             loader = TextLoader(extra_path, autodetect_encoding=True)
         documents = loader.load()
+        for d in documents:
+            d.metadata["id"] = extra + "-" + str(d.metadata.get("page",""))
         documentos.extend(documents)
     return documentos 
 
@@ -47,6 +49,8 @@ def crear_material(curso, carpeta):
         elif not str.endswith(archivo,".txt"): continue
         else:
             doc = TextLoader(path,autodetect_encoding=True).load()
+            for d in doc:
+                d.metadata["id"] = curso + " " + carpeta
             documentos_base.extend(doc)
             resumen = ""
             for d in doc:

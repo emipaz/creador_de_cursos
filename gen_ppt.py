@@ -27,7 +27,8 @@ def base(curso, index, documentos):
     path = os.path.join(curso,f"base_{index}")
     bs = Chroma(embedding_function = emb, persist_directory = path)
     fragmentos = text_splitter.split_documents(documents=documentos)
-    return bs.add_documents(documents=fragmentos)
+    ids = [ d.metadata["id"] + "-frag-" + str(idx) for idx , d in enumerate(fragmentos,1)]
+    return bs.add_documents(documents=fragmentos, ids=ids)
 
 def markdown_to_html_with_math(markdown_text):
     # Configurar las extensiones
