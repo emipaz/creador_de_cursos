@@ -1,5 +1,5 @@
 let conversationHistory = [];
-const api = "https://localhost:5002/api"
+const api = "http://localhost:5002/api"
 document.addEventListener('DOMContentLoaded', function() {
         const contenidoHTML = `
             <div id="chatbot-circle">💬</div>

@@ -24,7 +24,7 @@ def carga_extras(path):
         if extra.endswith('.pdf'):
             loader = PyMuPDFLoader(extra_path)
         if extra.endswith('.txt') or extra.endswith('.md') or extra.endswith(".py"):
-            loader = TextLoader(extra_path)
+            loader = TextLoader(extra_path, autodetect_encoding=True)
         documents = loader.load()
         documentos.extend(documents)
     return documentos 
@@ -46,7 +46,7 @@ def crear_material(curso, carpeta):
                 documentos_base.extend(carga_extras(raiz))
         elif not str.endswith(archivo,".txt"): continue
         else:
-            doc = TextLoader(path).load()
+            doc = TextLoader(path,autodetect_encoding=True).load()
             documentos_base.extend(doc)
             resumen = ""
             for d in doc:
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     index = 1
     htmls = []
     for carpeta in carpetas:
-        if carpeta in {".ipynb_checkpoints","__pycache__",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
+        if carpeta in {".ipynb_checkpoints","__pycache__","import_bot",".git",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
             continue
         modulo = carpeta
         print("Crando Html de ",modulo)

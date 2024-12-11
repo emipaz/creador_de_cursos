@@ -39,9 +39,10 @@
 #chatbot-container {
     display: none;
     position: fixed;
-    bottom: 50px;
+    bottom: 45px;
+    top :5px;
     right: 20px;
-    width: 600px;
+    width: 85%;
     height: 90%;
     max-width: 100%;
     background: var(--secondary-color-bot);
