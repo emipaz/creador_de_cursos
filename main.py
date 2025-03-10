@@ -23,8 +23,10 @@ def carga_extras(path):
         print(f"Cargando : {extra}")
         if extra.endswith('.pdf'):
             loader = PyMuPDFLoader(extra_path)
-        if extra.endswith('.txt') or extra.endswith('.md') or extra.endswith(".py"):
+        elif extra.endswith('.txt') or extra.endswith('.md') or extra.endswith(".py"):
             loader = TextLoader(extra_path, autodetect_encoding=True)
+        else:
+            continue
         documents = loader.load()
         for d in documents:
             d.metadata["id"] = extra + "-" + str(d.metadata.get("page",""))
