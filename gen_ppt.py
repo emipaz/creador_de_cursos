@@ -45,6 +45,13 @@ def guardar_html(html,curso, modulo, index):
         f.write(full_html)
     print("Se guardo en : ", des_html)
 
+
+def guardar_mark(resumen , curso, modulo):
+    des_mk = os.path.join(curso, modulo + ".md")
+    with open(des_mk, "w", encoding= "utf-8") as f:
+        f.write(resumen)
+    print("Se guardo en : ", des_mk)
+
 def crear_resumen(texto :str ) -> str:
     mensaje = [
         {

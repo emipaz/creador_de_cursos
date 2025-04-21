@@ -6,10 +6,10 @@ from langchain_community.document_loaders import TextLoader, PyMuPDFLoader
 from gen_ppt import crear_resumen
 from gen_ppt import crear_slide, crear_ppt
 from gen_ppt import markdown_to_html_with_math
-from gen_ppt import guardar_html
+from gen_ppt import guardar_html , guardar_mark
 from gen_ppt import base
 
-from config import DESTINO_WEB , DESTINO_PPT , DESTINO_BASES
+from config import DESTINO_WEB , DESTINO_PPT , DESTINO_BASES, DESTINO_MK
 
 
 def carga_extras(path):
@@ -36,6 +36,7 @@ def carga_extras(path):
 def crear_material(curso, carpeta):
     slides = {"slides":[]}
     html = ""
+    mark = ""
     documentos_base = []
     for archivo in sorted(os.listdir(os.path.join(curso, carpeta))):
         print(archivo)
@@ -61,7 +62,8 @@ def crear_material(curso, carpeta):
                 resumen += res
         
         html += markdown_to_html_with_math(resumen) + "\n"
-    return html, slides, documentos_base
+        mark += resumen + "\n"
+    return html, slides, documentos_base, mark
 
 def copiar_archivos_estaticos(source, dest): 
     shutil.copytree(source, dest, dirs_exist_ok = True) 
@@ -76,6 +78,7 @@ if __name__ == "__main__":
     print(args)
     base_dir      = os.path.dirname(os.path.abspath(__file__))
     carpeta_html  = os.path.join(args.carpeta, DESTINO_WEB)
+    carpeta_mark  = os.path.join(args.carpeta, DESTINO_MK)
     carpeta_ppts  = os.path.join(args.carpeta, DESTINO_PPT)
     carpeta_bases = os.path.join(args.carpeta, DESTINO_BASES)
     
@@ -98,8 +101,9 @@ if __name__ == "__main__":
             continue
         modulo = carpeta
         print("Crando Html de ",modulo)
-        html, slides, documentos = crear_material(curso, carpeta)
+        html, slides, documentos , resumen = crear_material(curso, carpeta)
         guardar_html(html, carpeta_html, modulo, index)
+        guardar_mark(resumen, carpeta_mark, modulo)
         crear_ppt(slides, carpeta_ppts, modulo)
         print(base(carpeta_bases ,index, documentos))
         if not args.unique_bot:
