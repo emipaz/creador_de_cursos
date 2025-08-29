@@ -14,7 +14,7 @@ from config import DESTINO_WEB , DESTINO_PPT , DESTINO_BASES, DESTINO_MK
 
 def carga_extras(path):
     carpeta_base = os.path.abspath(os.getcwd())
-    documentos = []
+    documentos_extras = []
     path = path.rstrip("/") 
     print("cargando extras desde:", path)
     if path == ".ipynb_chekpoints": return []
@@ -30,13 +30,15 @@ def carga_extras(path):
         documents = loader.load()
         for d in documents:
             d.metadata["id"] = extra + "-" + str(d.metadata.get("page",""))
-        documentos.extend(documents)
-    return documentos 
+        documentos_extras.extend(documents)
+        print("extras:",len(documentos_extras))
+    return documentos_extras
 
 def crear_material(curso, carpeta):
     slides = {"slides":[]}
     html = ""
     mark = ""
+    # resumen = ""
     documentos_base = []
     for archivo in sorted(os.listdir(os.path.join(curso, carpeta))):
         print(archivo)
@@ -44,18 +46,21 @@ def crear_material(curso, carpeta):
         print("cargando", path)
         if archivo == "extras":
             print("detecto carpeta extras")
-            extras = os.path.join(curso, carpeta , archivo)
-            carpetas = os.walk(extras)
-            for raiz ,_,__ in carpetas:
+            extras_path = os.path.join(curso, carpeta , archivo)
+            carpetas_extras = os.walk(extras_path)
+            for raiz ,_,__ in carpetas_extras:
                 print("Explorando :",raiz)
                 documentos_base.extend(carga_extras(raiz))
-        elif not str.endswith(archivo,".txt"): continue
+                print("documentos_base",len(documentos_base))
+        elif not str.endswith(archivo,".txt"): 
+            continue
         else:
+            resumen=""
             doc = TextLoader(path,autodetect_encoding=True).load()
             for d in doc:
                 d.metadata["id"] = curso + " " + carpeta
             documentos_base.extend(doc)
-            resumen = ""
+            print("documentos_base",len(documentos_base))
             for d in doc:
                 res = crear_resumen(d.page_content) + "\n___\n"
                 slides["slides"].extend(crear_slide(res).get("slides",[]))
@@ -84,6 +89,7 @@ if __name__ == "__main__":
     
     # os.makedirs(carpeta_html, exist_ok=True)
     os.makedirs(carpeta_ppts, exist_ok=True)
+    os.makedirs(carpeta_mark, exist_ok=True)
     estilos_js = os.path.join(base_dir, DESTINO_WEB)
     archivo_py = os.path.join(base_dir, "api")
     copiar_archivos_estaticos(estilos_js, carpeta_html)
@@ -94,14 +100,17 @@ if __name__ == "__main__":
     curso = curso.strip("\\").lstrip(".\\")
     
     print("curso",curso)
+    print("Carpetas", carpetas)
     index = 1
     htmls = []
     for carpeta in carpetas:
-        if carpeta in {".ipynb_checkpoints","__pycache__","import_bot",".git",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES}:
+        print(carpeta)
+        if carpeta in {".ipynb_checkpoints","__pycache__","import_bot",".git",DESTINO_WEB,DESTINO_PPT,DESTINO_BASES, DESTINO_MK }:
             continue
         modulo = carpeta
         print("Crando Html de ",modulo)
         html, slides, documentos , resumen = crear_material(curso, carpeta)
+        print("documentos:",len(documentos))
         guardar_html(html, carpeta_html, modulo, index)
         guardar_mark(resumen, carpeta_mark, modulo)
         crear_ppt(slides, carpeta_ppts, modulo)

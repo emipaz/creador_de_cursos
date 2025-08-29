@@ -9,6 +9,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from prompt import get_full_html
 from prompt import SYSTEM_MD, SYSTEM_PPT
 from dotenv import load_dotenv , find_dotenv
+from config import MODELO
+
+
 if load_dotenv(find_dotenv()):
     import openai
     cliente = openai.Client()
@@ -27,8 +30,23 @@ def base(curso, index, documentos):
     path = os.path.join(curso,f"base_{index}")
     bs = Chroma(embedding_function = emb, persist_directory = path)
     fragmentos = text_splitter.split_documents(documents=documentos)
-    ids = [ d.metadata["id"] + "-frag-" + str(idx) for idx , d in enumerate(fragmentos,1)]
-    return bs.add_documents(documents=fragmentos, ids=ids)
+    ids = [ d.metadata["source"] + "-frag-" + str(idx) for idx , d in enumerate(fragmentos,1)]
+    print("fragmentos", len(ids))
+    try:
+        print(bs.add_documents(documents=fragmentos, ids=ids))
+    except Exception as e:
+        print(f"Error procesando {extra_path}: {e}")
+        
+def base_sp(curso, documentos, modulo):
+    path = os.path.join(curso,f"base_{modulo}")
+    bs = Chroma(embedding_function = emb, persist_directory = path)
+    fragmentos = text_splitter.split_documents(documents=documentos)
+    ids = [ d.metadata["source"] + "-frag-" + str(idx) for idx , d in enumerate(fragmentos,1)]
+    print("fragmentos", len(ids))
+    try:
+        print(bs.add_documents(documents=fragmentos, ids=ids))
+    except Exception as e:
+        print(f"Error procesando {extra_path}: {e}")
 
 def markdown_to_html_with_math(markdown_text):
     # Configurar las extensiones
@@ -63,7 +81,7 @@ def crear_resumen(texto :str ) -> str:
         }
     ]
     chat = cliente.chat.completions.create(
-            model = "gpt-4o-mini", # modelo a usar
+            model = MODELO , # modelo a usar
             messages = mensaje,    # lista de mensajes
             temperature = 0,)
     return chat.choices[0].message.content
@@ -79,7 +97,7 @@ def crear_slide(mark : str, ) -> str:
         }
     ]
     chat = cliente.chat.completions.create(
-            model = "gpt-4o-mini", # modelo a usar
+            model = MODELO , # modelo a usar
             response_format={ "type": "json_object" },
             messages = mensaje,    #t lista de mensajes
             temperature = 0,)
